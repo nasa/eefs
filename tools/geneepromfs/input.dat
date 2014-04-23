@@ -1,0 +1,14 @@
+
+!
+! Input Filename       EEFS Filename     Spare Bytes   Attributes
+!---------------------------------------------------------------------------------
+  cfe-core.slf,        file1.slf,        100,          EEFS_ATTRIBUTE_NONE;
+  cfe-core.slf,        file2.slf,        100,          EEFS_ATTRIBUTE_READONLY;
+  cfe-core.slf,        file3.slf,        100,          EEFS_ATTRIBUTE_READONLY;
+  cfe-core.slf,        file4.slf,        100,          EEFS_ATTRIBUTE_READONLY;
+  cfe-core.slf,        file5.slf,        100,          EEFS_ATTRIBUTE_READONLY;
+  cfe-core.slf,        file6.slf,        100,          EEFS_ATTRIBUTE_READONLY;
+  cfe-core.slf,        file7.slf,        100,          EEFS_ATTRIBUTE_READONLY;
+  cfe-core.slf,        file8.slf,        100,          EEFS_ATTRIBUTE_READONLY;
+  cfe-core.slf,        file9.slf,        100,          EEFS_ATTRIBUTE_READONLY;
+  cfe-core.slf,        file10.slf,       100,          EEFS_ATTRIBUTE_NONE;
