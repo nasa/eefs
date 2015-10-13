@@ -1,4 +1,4 @@
-﻿EEPROM File System Design Notes
+EEPROM File System Design Notes
 Overview
 The EEPROM File System is a custom file system designed for data stored in EEPROM.  The EEPROM File System is a slot based file system where each slot is a fixed size contiguous region of memory allocated for a single file.  Note that each slot can be a different size.  The size of each slot is determined when the file system is created and is based on the size of the file to be stored in the slot.  Additional free space can be to the end of each slot to allow room for the file to grow in size if necessary and new files can be created at runtime.  
 Design Goals
