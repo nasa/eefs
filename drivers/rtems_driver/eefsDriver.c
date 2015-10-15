@@ -270,7 +270,7 @@ static int rtems_eefs_shutdown (rtems_filesystem_mount_table_entry_t* mt_entry)
 **
 ** RETURNS:
 **     RC_OK, filled pathloc for parent directory and name of new node on
-**     success, or -1 if error occured (errno set appropriately)
+**     success, or -1 if error occurred (errno set appropriately)
 */
 static int rtems_eefs_evaluate_for_make(
    const char                         *path,       /* IN     */
@@ -374,8 +374,8 @@ static int rtems_eefs_evaluate_for_make(
 ** The routine starts from the root stripping away any leading path separators
 ** breaking the path up into the node names and checking an inode exists for
 ** that node name. Permissions are checked to insure access to the node is
-** allowed. A path to a node must be accessable all the way even if the end
-** result is directly accessable. As a user on Linux try "ls /root/../tmp" and
+** allowed. A path to a node must be accessible all the way even if the end
+** result is directly accessible. As a user on Linux try "ls /root/../tmp" and
 ** you will see if fails.
 **
 ** The whole process is complicated by crossmount paths where we head down into

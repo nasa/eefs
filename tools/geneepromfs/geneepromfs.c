@@ -361,7 +361,7 @@ uint32 ThisMachineDataEncoding(void)
 /* Calculate a 16 bit CRC over a range of memory.  Note that as a convention I store the calculated crc value
  * at the beginning of the data.  In this code when I call this function I am passing the address of the
  * beginning of data I am calculating the crc for which includes the crc field.  This is not a bug, the crc field is
- * initialized to 0 and does not affect the calculated crc.  I did this for convienence and to make the
+ * initialized to 0 and does not affect the calculated crc.  I did this for convenience and to make the
  * code more readable vs adding 4 to the DataPtr and subtracting 4 from the DataLength to skip the crc. */
 uint32 CalculateCRC(void *DataPtr, int DataLength, uint32 InputCrc)
 {
