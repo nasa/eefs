@@ -16,7 +16,7 @@
 **     This file contains the higher level api interface functions to the eefs_fileapi.c code. 
 **     This layer of the file system supports multiple devices and volumes where the 
 **     eefs_fileapi.c layer only focuses on a single file system.
-**     Most of the functions in this file are essentually wrappers for the lower 
+**     Most of the functions in this file are essentially wrappers for the lower 
 **     level function contained in eefs_fileapi.c.
 **     All api functions are designed to be as similar to a standard unix filesystem api as possible.
 **  
@@ -546,7 +546,7 @@ int32 EEFS_CloseDir(EEFS_DirectoryDescriptor_t *DirectoryDescriptor)
 }
 
 /* Splits a Path into the MountPoint and the Filename and returns the result in SplitPath.  Note that a properly
-   formatted Path begis with a '/' followed by the MountPoint or VolumeName, followed by a second '/', followed by
+   formatted Path begins with a '/' followed by the MountPoint or VolumeName, followed by a second '/', followed by
    the Filename.  ex "/MountPoint/Filename" */
 int32 EEFS_SplitPath(char *InputPath, EEFS_SplitPath_t *SplitPath)
 {

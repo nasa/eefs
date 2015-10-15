@@ -14,7 +14,7 @@
 **
 ** Purpose: This file contains the higher level api interface function to the eefs_fileapi.c code.  This layer of the file
 **   system supports multiple devices and volumes where the eefs_fileapi.c layer only focuses on a single file system.
-**   Most of the functions in this file are essentually wrappers for the lower level function contained in eefs_fileapi.c.
+**   Most of the functions in this file are essentially wrappers for the lower level function contained in eefs_fileapi.c.
 **   All api functions are designed to be as similar to a standard unix filesystem api as possible.
 **
 ** Design Notes:

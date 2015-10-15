@@ -18,7 +18,7 @@
 **
 ** 1. Call EEFS_DrvInstall() to add the device driver to the vxWorks driver table.  This function should only be called
 **    once during initialization.
-** 2. Call EEFS_DevCreate() for each file system to add it to the vxWorks device list.  Separate device descriptos must
+** 2. Call EEFS_DevCreate() for each file system to add it to the vxWorks device list.  Separate device descriptions must
 **    be declared for each file system.
 ** 
 ** For Example:

@@ -33,7 +33,7 @@
 #define EEFS_LIB_EEPROM_READ(Dest, Src, Length)  memcpy(Dest, Src, Length)
 #define EEFS_LIB_EEPROM_FLUSH
 
-/* These macros define the lock and unlock interface functions used to guarentee
+/* These macros define the lock and unlock interface functions used to guarantee
  * exclusive access to shared resources.  Defaults to undefined since it is implementation dependent */
 #define EEFS_LIB_LOCK
 #define EEFS_LIB_UNLOCK
