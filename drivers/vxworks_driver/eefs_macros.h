@@ -1,10 +1,10 @@
 /*
-**      Copyright (c) 2010-2014, United States government as represented by the 
-**      administrator of the National Aeronautics Space Administration.  
-**      All rights reserved. This software was created at NASAs Goddard 
+**      Copyright (c) 2010-2014, United States government as represented by the
+**      administrator of the National Aeronautics Space Administration.
+**      All rights reserved. This software was created at NASAs Goddard
 **      Space Flight Center pursuant to government contracts.
 **
-**      This is governed by the NASA Open Source Agreement and may be used, 
+**      This is governed by the NASA Open Source Agreement and may be used,
 **      distributed and modified only pursuant to the terms of that agreement.
 */
 
@@ -20,7 +20,7 @@
 */
 
 #ifndef _eefs_macros_
-#define	_eefs_macros_
+#define _eefs_macros_
 
 /*
  * Includes
@@ -45,7 +45,7 @@ extern SEM_ID EEFS_semId;
 
 /* These macros define the lock and unlock interface functions used to guarentee
  * exclusive access to shared resources.  Defaults to undefined since it is implementation dependent */
-#define EEFS_LIB_LOCK                            semTake(EEFS_semId, WAIT_FOREVER);  
+#define EEFS_LIB_LOCK                            semTake(EEFS_semId, WAIT_FOREVER);
 #define EEFS_LIB_UNLOCK                          semGive(EEFS_semId);
 
 /* This macro defines the time interface function.  Defaults to time(NULL) */

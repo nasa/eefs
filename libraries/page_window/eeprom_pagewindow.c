@@ -1,10 +1,10 @@
 /*
-**      Copyright (c) 2010-2014, United States government as represented by the 
-**      administrator of the National Aeronautics Space Administration.  
-**      All rights reserved. This software was created at NASAs Goddard 
+**      Copyright (c) 2010-2014, United States government as represented by the
+**      administrator of the National Aeronautics Space Administration.
+**      All rights reserved. This software was created at NASAs Goddard
 **      Space Flight Center pursuant to government contracts.
 **
-**      This is governed by the NASA Open Source Agreement and may be used, 
+**      This is governed by the NASA Open Source Agreement and may be used,
 **      distributed and modified only pursuant to the terms of that agreement.
 */
 
@@ -71,7 +71,7 @@ int32 EEPROM_PageWindowInit(void)
     }
 
     return(ReturnStatus);
-    
+
 } /* End of EEPROM_PageWindowInit() */
 
 /* High level api function to write data to the page window. */
@@ -81,9 +81,9 @@ int32 EEPROM_PageWindowWrite(void *Dest, void *Src, uint32 Size)
     int32       ReturnStatus;
 
     if ((Src != NULL) && (Dest != NULL)) {
-        
+
         if (EEPROM_IsValidAddressRange((uint32)Dest, Size) == TRUE) {
-            
+
             if (EEPROM_IsWriteProtected((uint32)Dest) == FALSE) {
 
                 semTake(EEPROM_semId, WAIT_FOREVER);
@@ -105,25 +105,25 @@ int32 EEPROM_PageWindowWrite(void *Dest, void *Src, uint32 Size)
     else {
         ReturnStatus = EEPROM_INVALID_ADDRESS;
     }
-    
+
     return(ReturnStatus);
-    
+
 } /* End of EEPROM_PageWindowWrite() */
 
 /* Write a byte into the page window buffer */
 void EEPROM_PageWindowWriteByte(uint32 MemoryAddress, uint8 ByteValue)
-{   
+{
     if (EEPROM_PageWindow.Loaded == FALSE) {
         EEPROM_PageWindowLoad(MemoryAddress);
     }
-    else if ((MemoryAddress < EEPROM_PageWindow.LowerAddress) || 
+    else if ((MemoryAddress < EEPROM_PageWindow.LowerAddress) ||
              (MemoryAddress > EEPROM_PageWindow.UpperAddress)) {
         EEPROM_PageWindowFlush();
         EEPROM_PageWindowLoad(MemoryAddress);
     }
 
     EEPROM_PageWindow.Buffer[MemoryAddress - EEPROM_PageWindow.LowerAddress] = ByteValue;
-    
+
 } /* End of EEPROM_PageWindowWriteByte() */
 
 /* Write data from the page window buffer into eeprom */
@@ -149,19 +149,19 @@ void EEPROM_PageWindowFlush(void)
         EEPROM_PageWindow.Loaded = FALSE;
         semGive(EEPROM_semId);
     }
-    
+
 } /* End of EEPROM_PageWindowFlush() */
 
 /* Copy data from eeprom into the page window buffer */
 void EEPROM_PageWindowLoad(uint32 MemoryAddress)
 {
     EEPROM_PageWindow.Loaded = TRUE;
-   
+
     EEPROM_PageWindow.LowerAddress = (MemoryAddress & EEPROM_PAGE_WINDOW_MASK);
     if (EEPROM_PageWindow.LowerAddress < EEPROM_START_ADDR) {
         EEPROM_PageWindow.LowerAddress = EEPROM_START_ADDR;
     }
-    
+
     EEPROM_PageWindow.UpperAddress = (EEPROM_PageWindow.LowerAddress + EEPROM_PAGE_WINDOW_SIZE - 1);
     if (EEPROM_PageWindow.UpperAddress > EEPROM_END_ADDR) {
         EEPROM_PageWindow.UpperAddress = EEPROM_END_ADDR;
@@ -170,7 +170,7 @@ void EEPROM_PageWindowLoad(uint32 MemoryAddress)
     EEPROM_PageWindow.BufferSize = (EEPROM_PageWindow.UpperAddress - EEPROM_PageWindow.LowerAddress + 1);
 
     LRO_Read_EEPROM(&EEPROM_PageWindow.Buffer, (EEPROM_PageWindow.LowerAddress - EEPROM_START_ADDR), EEPROM_PageWindow.BufferSize);
-    
+
 } /* End of EEPROM_PageWindowLoad() */
 
 /* Make sure the address range is in eeprom and does not span banks */
@@ -203,7 +203,7 @@ uint8 EEPROM_IsValidAddressRange(uint32 Address, uint32 Size)
     }
 
     return(ReturnStatus);
-    
+
 } /* End of EEPROM_IsValidAddressRange() */
 
 /* Check to see if the eeprom bank is write protected */
@@ -236,7 +236,7 @@ uint8 EEPROM_IsWriteProtected(uint32 Address)
     }
 
     return(ReturnStatus);
-    
+
 } /* End of EEPROM_IsWriteProtected() */
 
 /************************/

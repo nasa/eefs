@@ -1,10 +1,10 @@
 /*
-**      Copyright (c) 2010-2014, United States government as represented by the 
-**      administrator of the National Aeronautics Space Administration.  
-**      All rights reserved. This software was created at NASAs Goddard 
+**      Copyright (c) 2010-2014, United States government as represented by the
+**      administrator of the National Aeronautics Space Administration.
+**      All rights reserved. This software was created at NASAs Goddard
 **      Space Flight Center pursuant to government contracts.
 **
-**      This is governed by the NASA Open Source Agreement and may be used, 
+**      This is governed by the NASA Open Source Agreement and may be used,
 **      distributed and modified only pursuant to the terms of that agreement.
 */
 
@@ -103,8 +103,8 @@ uint32 GetToken(void)
                 ungetc(ch, Parser.FilePointer);
                 break;
 
-            default: 
-                /* A STRING_TOKEN must begin with a letter, '/', '\', or '.', can contain letters, numbers, 
+            default:
+                /* A STRING_TOKEN must begin with a letter, '/', '\', or '.', can contain letters, numbers,
                  * '/', '\', '.', '_', or '-', and cannot contain any spaces */
                 if (isalpha(ch) || ch == '/' || ch == '\\' || ch == '.') { /* string argument */
                     for (i=0; i < STRING_TOKEN_SIZE; i++)  {
@@ -120,10 +120,10 @@ uint32 GetToken(void)
                     }
                     UglyExit("File: %s Line: %lu: Error: String Token \'%s\' Too Long, Max Length: %lu\n", Parser.Filename, Parser.LineNumber, Parser.StringToken, STRING_TOKEN_SIZE);
 
-                } 
+                }
                 /* A NUMBER_TOKEN is parsed as a string and must begin with a digit and may be specified in decimal, hex, or
                  * octal. Integers are supported, no floating point or + - notations */
-                else if (isdigit(ch)) { 
+                else if (isdigit(ch)) {
                     for (i=0; i < STRING_TOKEN_SIZE; i++) {
                         if (isxdigit(ch) || ch == 'x' || ch == 'X') {
                             Parser.StringToken[i] = ch;
@@ -186,7 +186,7 @@ void GetInputFilename(InputParameters_t *InputParameters)
 void GetEEFSFilename(InputParameters_t *InputParameters)
 {
     if (Parser.Token == STRING) {
-        if (strlen(Parser.StringToken) < EEFS_MAX_FILENAME_SIZE) { 
+        if (strlen(Parser.StringToken) < EEFS_MAX_FILENAME_SIZE) {
             strcpy(InputParameters->EEFSFilename, Parser.StringToken);
             GetToken();
             if (Parser.Token == COMMA) {

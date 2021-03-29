@@ -1,10 +1,10 @@
 /*
-**      Copyright (c) 2010-2014, United States government as represented by the 
-**      administrator of the National Aeronautics Space Administration.  
-**      All rights reserved. This software was created at NASAs Goddard 
+**      Copyright (c) 2010-2014, United States government as represented by the
+**      administrator of the National Aeronautics Space Administration.
+**      All rights reserved. This software was created at NASAs Goddard
 **      Space Flight Center pursuant to government contracts.
 **
-**      This is governed by the NASA Open Source Agreement and may be used, 
+**      This is governed by the NASA Open Source Agreement and may be used,
 **      distributed and modified only pursuant to the terms of that agreement.
 **
 */
@@ -13,7 +13,7 @@
 ** Filename: eefs_vxworks.c
 **
 ** Purpose: This file contains vxWorks Device Driver functions for the EEPROM File System.
-** 
+**
 */
 
 /*
@@ -85,7 +85,7 @@ char                           *EEFS_ExtractFilename(char *Path);
  */
 
 /* Adds the eeprom file system driver to the vxWorks driver table and returns a index or driver number to the slot in
- * the driver table where the driver was installed.  This function should only be called once during startup.  Returns 
+ * the driver table where the driver was installed.  This function should only be called once during startup.  Returns
  * a driver number on success or ERROR if there was an error. */
 int EEFS_DrvInstall(void)
 {
@@ -94,7 +94,7 @@ int EEFS_DrvInstall(void)
     if ((EEFS_semId = semMCreate(SEM_Q_PRIORITY | SEM_INVERSION_SAFE)) != NULL) {
 
         EEFS_LibInit();
-        
+
         DriverNumber = iosDrvInstall(
                 (FUNCPTR) EEFS_Creat,   /* create */
                 (FUNCPTR) EEFS_Remove,  /* delete */
@@ -108,14 +108,14 @@ int EEFS_DrvInstall(void)
         return (DriverNumber);
     }
     else { /* error creating semaphore */
-        
+
         return(ERROR);
     }
-    
+
 } /* End of EEFS_DrvInstall() */
 
 /* Add a eeprom file system device to the vxWorks device list. The device name must start with a slash, ex. /eefs1.  The
- * base address is the start address of the file system in eeprom.  The device descriptor is initialized by this function 
+ * base address is the start address of the file system in eeprom.  The device descriptor is initialized by this function
  * however you must allocate memory for the device descriptor.  Returns OK on success or ERROR if there was an error. */
 int EEFS_DevCreate(int DriverNumber, char *DeviceName, uint32 BaseAddress, EEFS_DeviceDescriptor_t *DeviceDescriptor)
 {
@@ -141,7 +141,7 @@ int EEFS_DevCreate(int DriverNumber, char *DeviceName, uint32 BaseAddress, EEFS_
     }
 
     return (ReturnCode);
-    
+
 } /* End of EEFS_DevCreate() */
 
 /* Remove a eeprom file system device from the vxWorks device list.  Returns OK on success or ERROR if there
@@ -166,7 +166,7 @@ int EEFS_DevDelete(EEFS_DeviceDescriptor_t *DeviceDescriptor)
     }
 
     return(ReturnCode);
-    
+
 } /* End of EEFS_DevDelete() */
 
 /* Create a new file or re-write an existing file.  The EEFS does not support directories so a new directory cannot be created
@@ -225,7 +225,7 @@ int EEFS_Creat(EEFS_DeviceDescriptor_t *DeviceDescriptor, char *Path, int Mode)
     }
 
     return(ReturnCode);
-    
+
 } /* End of EEFS_Creat() */
 
 /* Delete a file from the file system.  Returns OK on success or ERROR if there was an error. */
@@ -264,7 +264,7 @@ int EEFS_Remove(EEFS_DeviceDescriptor_t *DeviceDescriptor, char *Path)
     }
 
     return (ReturnCode);
-    
+
 } /* End of EEFS_Remove() */
 
 /* Open a directory for reading or a file for reading and writing. Returns a pointer to a EEFS_OpenFileDescriptor_t
@@ -274,7 +274,7 @@ int EEFS_Open(EEFS_DeviceDescriptor_t *DeviceDescriptor, char *Path, int Flags, 
     EEFS_OpenFileDescriptor_t  *OpenFileDescriptor;
     char                       *Filename;
     int                         ReturnCode;
-    
+
     if (DeviceDescriptor != NULL) {
 
         if (Path != NULL) {
@@ -348,16 +348,16 @@ int EEFS_Open(EEFS_DeviceDescriptor_t *DeviceDescriptor, char *Path, int Flags, 
     }
 
     return(ReturnCode);
-    
+
 } /* End of EEFS_Open() */
 
 /* Close an open file or directory.  Returns OK on success or ERROR if there was an error. */
 int EEFS_Close(EEFS_OpenFileDescriptor_t *OpenFileDescriptor)
 {
     int       ReturnCode;
-    
+
     if (OpenFileDescriptor != NULL) {
-        
+
         if (OpenFileDescriptor->Type == EEFS_DIRECTORY) {
 
             if (EEFS_LibCloseDir(OpenFileDescriptor->DirectoryDescriptor) == EEFS_SUCCESS) {
@@ -391,9 +391,9 @@ int EEFS_Close(EEFS_OpenFileDescriptor_t *OpenFileDescriptor)
         ReturnCode = EEFS_ERROR;
         errnoSet(EBADF);
     }
-    
+
     return(ReturnCode);
-    
+
 } /* End of EEFS_Close() */
 
 /* Read data from an open file.  Returns the number of bytes read on success or ERROR if there was an error. */
@@ -403,9 +403,9 @@ int EEFS_Read(EEFS_OpenFileDescriptor_t *OpenFileDescriptor, void *Buffer, int L
     int       ReturnCode;
 
     if (OpenFileDescriptor != NULL) {
-        
+
         if (OpenFileDescriptor->Type == EEFS_FILE) {
-            
+
              if ((BytesRead = EEFS_LibRead(OpenFileDescriptor->FileDescriptor, Buffer, Length)) >= 0) {
 
                  ReturnCode = BytesRead;
@@ -424,9 +424,9 @@ int EEFS_Read(EEFS_OpenFileDescriptor_t *OpenFileDescriptor, void *Buffer, int L
         ReturnCode = ERROR;
         errnoSet(EBADF);
     }
-    
+
     return(ReturnCode);
-    
+
 } /* End of EEFS_Read() */
 
 /* Write data to an open file.  Returns the number of bytes written on success or ERROR if there was an error. */
@@ -459,7 +459,7 @@ int EEFS_Write(EEFS_OpenFileDescriptor_t *OpenFileDescriptor, void *Buffer, int 
     }
 
     return(ReturnCode);
-    
+
 } /* End of EEFS_Write() */
 
 /* Perform device specific i/o control.  Returns ERROR if the requested operation is not
@@ -467,7 +467,7 @@ int EEFS_Write(EEFS_OpenFileDescriptor_t *OpenFileDescriptor, void *Buffer, int 
 int EEFS_Ioctl(EEFS_OpenFileDescriptor_t *OpenFileDescriptor, int Function, int Arg)
 {
     switch (Function) {
-        
+
         case FIOSEEK: /* set file read/write pointer */
             return(EEFS_Seek(OpenFileDescriptor, Arg));
             break;
@@ -509,7 +509,7 @@ int EEFS_Ioctl(EEFS_OpenFileDescriptor_t *OpenFileDescriptor, int Function, int 
             return(ERROR);
             break;
     }
-    
+
 } /* End of EEFS_Ioctl() */
 
 /* Set the file read/write pointer.  Returns OK on success or ERROR if there was an error. */
@@ -541,7 +541,7 @@ int EEFS_Seek(EEFS_OpenFileDescriptor_t *OpenFileDescriptor, int ByteOffset)
     }
 
     return(ReturnCode);
-    
+
 } /* End of EEFS_Seek() */
 
 /* Returns the current seek pointer.  Returns the current byte offset of the seek pointer in the file or ERROR if there
@@ -575,7 +575,7 @@ int EEFS_Ftell(EEFS_OpenFileDescriptor_t *OpenFileDescriptor)
     }
 
     return(ReturnCode);
-    
+
 } /* End of EEFS_Ftell() */
 
 /* Returns the number of unread bytes in the file.  The number of unread bytes is returned in the UnreadBytes argument.
@@ -617,7 +617,7 @@ int EEFS_Funread(EEFS_OpenFileDescriptor_t *OpenFileDescriptor, int *UnreadBytes
     }
 
     return(ReturnCode);
-    
+
 } /* End of EEFS_Funread() */
 
 /* Read an entry from a directory structure.  The directory information is returned in the Directory argument.
@@ -632,7 +632,7 @@ int EEFS_ReadDir(EEFS_OpenFileDescriptor_t *OpenFileDescriptor, DIR *Directory)
         if (OpenFileDescriptor->Type == EEFS_DIRECTORY) {
 
             if (Directory != NULL) {
-            
+
                 /* the vxWorks code uses the dd_cookie variable to keep track of where you are in the directory listing.  I
                  * have my own variable for this purpose, however the vxWorks code has a rewind command that sets dd_cookie
                  * to 0 when they want to restart the directory listing at the beginning.  So if dd_cookie is 0 then I reset my
@@ -672,7 +672,7 @@ int EEFS_ReadDir(EEFS_OpenFileDescriptor_t *OpenFileDescriptor, DIR *Directory)
     }
 
     return(ReturnCode);
-    
+
 } /* End of EEFS_ReadDir() */
 
 /* Returns file inode information.  The stat information is returned in the StatBuffer argument.
@@ -688,9 +688,9 @@ int EEFS_Fstat(EEFS_OpenFileDescriptor_t *OpenFileDescriptor, struct stat *StatB
 
             memset(StatBuffer, 0, sizeof(struct stat));
             if (OpenFileDescriptor->Type == EEFS_FILE) {
-                
+
                 if (EEFS_LibFstat(OpenFileDescriptor->FileDescriptor, &EEFS_StatBuffer) == EEFS_SUCCESS) {
-                    StatBuffer->st_mode = S_IFREG;            
+                    StatBuffer->st_mode = S_IFREG;
                     StatBuffer->st_size = EEFS_StatBuffer.FileSize;
                     ReturnCode = OK;
                 }
@@ -715,7 +715,7 @@ int EEFS_Fstat(EEFS_OpenFileDescriptor_t *OpenFileDescriptor, struct stat *StatB
     }
 
     return(ReturnCode);
-    
+
 } /* End of EEFS_Fstat() */
 
 /* Renames a file.  Returns OK on success or ERROR if there was an error. */
@@ -738,7 +738,7 @@ int EEFS_Rename(EEFS_OpenFileDescriptor_t *OpenFileDescriptor, char *Path)
                 if (EEFS_LibFstat(OpenFileDescriptor->FileDescriptor, &EEFS_StatBuffer) == EEFS_SUCCESS) {
 
                     if ((FileDescriptorPointer = EEFS_LibFileDescriptor2Pointer(OpenFileDescriptor->FileDescriptor)) != NULL) {
-                        
+
                         Status = EEFS_LibRename(FileDescriptorPointer->InodeTable, EEFS_StatBuffer.Filename, NewFilename);
                         if (Status == EEFS_SUCCESS) {
                             ReturnCode = OK;
@@ -778,7 +778,7 @@ int EEFS_Rename(EEFS_OpenFileDescriptor_t *OpenFileDescriptor, char *Path)
     }
 
     return(ReturnCode);
-    
+
 } /* End of EEFS_Rename() */
 
 /* Checks the file system for errors and dumps the Inode Table */
@@ -788,7 +788,7 @@ int EEFS_ChkDsk(EEFS_OpenFileDescriptor_t *OpenFileDescriptor, int Arg)
 
     /* unused parameter */
     (void)Arg;
-    
+
     if (OpenFileDescriptor != NULL) {
 
         if (OpenFileDescriptor->Type == EEFS_DIRECTORY) {
@@ -806,14 +806,14 @@ int EEFS_ChkDsk(EEFS_OpenFileDescriptor_t *OpenFileDescriptor, int Arg)
     }
 
     return(ReturnCode);
-    
+
 } /* End of EEFS_ChkDsk() */
 
 /* Returns the file system free space */
 int EEFS_FreeSpace(EEFS_OpenFileDescriptor_t *OpenFileDescriptor, uint32 *FreeCount)
 {
     int                     ReturnCode;
-    
+
     if (OpenFileDescriptor != NULL) {
 
         if (OpenFileDescriptor->Type == EEFS_DIRECTORY) {
@@ -832,7 +832,7 @@ int EEFS_FreeSpace(EEFS_OpenFileDescriptor_t *OpenFileDescriptor, uint32 *FreeCo
     }
 
     return(ReturnCode);
-    
+
 } /* End of EEFS_FreeSpace() */
 
 /* Returns the file system free space */
@@ -871,7 +871,7 @@ char *EEFS_ExtractFilename(char *Path)
         if (Path[i] != '/' && Path[i] != '.') break;
     }
     return(&Path[i]);
-    
+
 } /* End of EEFS_ExtractFilename() */
 
 /************************/

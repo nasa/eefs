@@ -1,18 +1,18 @@
 
 /*
-**      Copyright (c) 2010-2014, United States government as represented by the 
-**      administrator of the National Aeronautics Space Administration.  
-**      All rights reserved. This software was created at NASAs Goddard 
+**      Copyright (c) 2010-2014, United States government as represented by the
+**      administrator of the National Aeronautics Space Administration.
+**      All rights reserved. This software was created at NASAs Goddard
 **      Space Flight Center pursuant to government contracts.
 **
-**      This is governed by the NASA Open Source Agreement and may be used, 
+**      This is governed by the NASA Open Source Agreement and may be used,
 **      distributed and modified only pursuant to the terms of that agreement.
 */
 
 /*
  * Filename: eefs_swap.c
  *
- * Purpose: 
+ * Purpose:
  *
  */
 
@@ -43,8 +43,8 @@ uint32   ThisMachineDataEncoding(void);
  * Function Definitions
  */
 
-/* 
-** This function byte swaps a 16 bit integer 
+/*
+** This function byte swaps a 16 bit integer
 */
 void SwapUInt16(uint16 *ValueToSwap)
 {
@@ -54,8 +54,8 @@ void SwapUInt16(uint16 *ValueToSwap)
     BytePtr[0] = TempByte;
 }
 
-/* 
-** This function byte swaps a 32 bit integer 
+/*
+** This function byte swaps a 32 bit integer
 */
 void SwapUInt32(uint32 *ValueToSwap)
 {
@@ -68,9 +68,9 @@ void SwapUInt32(uint32 *ValueToSwap)
     BytePtr[1] = TempByte;
 }
 
-/* 
+/*
 ** This function examines the byte ordering of a 32 bit word to determine
-** if this machine is a Big Endian or Little Endian machine 
+** if this machine is a Big Endian or Little Endian machine
 */
 uint32 ThisMachineDataEncoding(void)
 {
@@ -129,7 +129,7 @@ void    EEFS_SwapFileAllocationTableEntry(EEFS_FileAllocationTableEntry_t *FileA
     SwapUInt32(&FileAllocationTableEntry->MaxFileSize);
 }
 
- 
+
 void    EEFS_SwapFileAllocationTableHeader(EEFS_FileAllocationTableHeader_t *FileAllocationTableHeader)
 {
 

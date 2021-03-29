@@ -1,10 +1,10 @@
 /*
-**      Copyright (c) 2010-2014, United States government as represented by the 
-**      administrator of the National Aeronautics Space Administration.  
-**      All rights reserved. This software was created at NASAs Goddard 
+**      Copyright (c) 2010-2014, United States government as represented by the
+**      administrator of the National Aeronautics Space Administration.
+**      All rights reserved. This software was created at NASAs Goddard
 **      Space Flight Center pursuant to government contracts.
 **
-**      This is governed by the NASA Open Source Agreement and may be used, 
+**      This is governed by the NASA Open Source Agreement and may be used,
 **      distributed and modified only pursuant to the terms of that agreement.
 */
 
@@ -16,7 +16,7 @@
 **           of the functions (Write_vb, Write_Virtual_Buffer,
 **           Set_Page_Window) are modified from Alan's original
 **           code for EEPROM read/write through a parallel
-**           port using the BDM library.  The function 
+**           port using the BDM library.  The function
 **           Write_vb was modified to add a little-endian
 **           to big-endian conversion and the polling for
 **           the EEPROM Write to complete (this is needed
@@ -49,7 +49,7 @@
 ** Defines
 **
 */
-#define SIZE_OF_BUFFER 512 
+#define SIZE_OF_BUFFER 512
 
 /*
 ** This macro defines the mask for buffer usage
@@ -183,7 +183,7 @@ void store_ee_byte(unsigned long address, unsigned char v, unsigned char flush_b
     ** Add the data to the buffer
     */
     virtual_buffer[address-lower_address] = v;
-    
+
 }
 
 void  Write_vb(unsigned long *dest, unsigned long *src, unsigned long dwords )
@@ -202,10 +202,10 @@ void  Write_vb(unsigned long *dest, unsigned long *src, unsigned long dwords )
     static int board_big_endian_p = 1;   /* Assume big-endian for coldfire */
 
     #ifdef EEFSTOOL_DEBUG
-       printf("Before writing buffer to eeprom\n"); 
-       printf("   --> dest = 0x%08X\n",dest); 
-       printf("   --> src = 0x%08X\n",src); 
-       printf("   --> dwords = 0x%08X\n",dwords); 
+       printf("Before writing buffer to eeprom\n");
+       printf("   --> dest = 0x%08X\n",dest);
+       printf("   --> src = 0x%08X\n",src);
+       printf("   --> dwords = 0x%08X\n",dwords);
     #endif
 
     for ( j = 0; j <= dwords; j++ )
@@ -236,11 +236,11 @@ void  Write_vb(unsigned long *dest, unsigned long *src, unsigned long dwords )
         ** delay/poll
         */
         /* PollEEPROM(); */
-        
-        usleep(DelayValue); 
+
+        usleep(DelayValue);
    }
    #ifdef EEFSTOOL_DEBUG
-      printf("After writing buffer to eeprom\n"); 
+      printf("After writing buffer to eeprom\n");
    #endif
 }
 
@@ -254,7 +254,7 @@ void Write_Virtual_Buffer(void)
     unsigned long                 *eeprom_ptr;
     unsigned long                  lp;
 
-    #ifdef EEFSTOOL_DEBUG  
+    #ifdef EEFSTOOL_DEBUG
        printf("In Write_Virtual_Buffer\n");
     #endif
 
@@ -263,7 +263,7 @@ void Write_Virtual_Buffer(void)
     */
     if ( window_set == TRUE )
     {
-         #ifdef EEFSTOOL_DEBUG  
+         #ifdef EEFSTOOL_DEBUG
             printf("In Write_Virtual_Buffer -- Window set, so write\n");
          #endif
 
@@ -326,30 +326,30 @@ void Set_Page_Window( unsigned long address)
    {
       lower_address = address & BUFF_MASK; /* for a SIZE_OF_BUFFER byte buffer */
       if (lower_address < PROM_START)
-	   lower_address = PROM_START;
+       lower_address = PROM_START;
       upper_address = lower_address + SIZE_OF_BUFFER - 1;
       if (upper_address > PROM_END)
-	   upper_address = PROM_END;
+       upper_address = PROM_END;
       #ifdef EEFSTOOL_DEBUG
          printf("PROM Window Set: From: 0x%X to 0x%X\n",(unsigned int)lower_address,
-                                                      (unsigned int )upper_address); 
+                                                      (unsigned int )upper_address);
       #endif
    }
    else
    {
       lower_address = address & BUFF_MASK; /* for a SIZE_OF_BUFFER byte buffer */
       if (lower_address < EEPROM_START)
-	   lower_address = EEPROM_START;
+       lower_address = EEPROM_START;
       upper_address = lower_address + SIZE_OF_BUFFER - 1;
       if (upper_address > EEPROM_END)
-	   upper_address = EEPROM_END;
-  
+       upper_address = EEPROM_END;
+
       #ifdef EEFSTOOL_DEBUG
          printf("EEPROM Window Set: From: 0x%X to 0x%X\n",(unsigned int)lower_address,
-                                                      (unsigned int )upper_address); 
+                                                      (unsigned int )upper_address);
       #endif
    }
-   
+
    /*
    ** Read in the current EEPROM contents
    */

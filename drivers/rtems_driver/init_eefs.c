@@ -1,10 +1,10 @@
 /*
-**      Copyright (c) 2010-2014, United States government as represented by the 
-**      administrator of the National Aeronautics Space Administration.  
-**      All rights reserved. This software was created at NASAs Goddard 
+**      Copyright (c) 2010-2014, United States government as represented by the
+**      administrator of the National Aeronautics Space Administration.
+**      All rights reserved. This software was created at NASAs Goddard
 **      Space Flight Center pursuant to government contracts.
 **
-**      This is governed by the NASA Open Source Agreement and may be used, 
+**      This is governed by the NASA Open Source Agreement and may be used,
 **      distributed and modified only pursuant to the terms of that agreement.
 **
 */
@@ -16,7 +16,7 @@
 ** It is not intended to be part of the EEFS library, but instead should be incorporated
 ** into an application that uses the EEFS.
 **
-**  
+**
 */
 
 #error "This C file is an example, not intended to be compiled with the EEFS"
@@ -53,8 +53,8 @@ uint32 rtems_eefs_a_address;
 uint32 rtems_eefs_b_address;
 
 /*
-**  Register the EEFS filesystem and assign the 
-**  addresses for the EEFS banks. 
+**  Register the EEFS filesystem and assign the
+**  addresses for the EEFS banks.
 */
 int setup_eefs(void)
 {
@@ -63,7 +63,7 @@ int setup_eefs(void)
    /*
    ** Assign the EEFS addresses
    ** These addresses should be the actual addresses of your EEFS images
-   ** You can use variables instead of absolute addresses ( or variables 
+   ** You can use variables instead of absolute addresses ( or variables
    ** in a linker script )
    */
    rtems_eefs_a_address = 0x12345678;
@@ -71,7 +71,7 @@ int setup_eefs(void)
 
    /*
    ** Register the EEFS file system with RTEMS
-   ** After this is done, then the volumes can be mounted 
+   ** After this is done, then the volumes can be mounted
    ** using a C call or a shell "mount" command
    */
    Status = rtems_filesystem_register("eefs", &rtems_eefs_initialize );
@@ -86,8 +86,8 @@ int setup_eefs(void)
       if( Status == 0 )
       {
          printf("setup_eefs: EEFS file system successfully mounted at /eefs \n");
-      } 
-      else 
+      }
+      else
       {
          printf("setup_eefs: EEFS mount failed\n");
       }

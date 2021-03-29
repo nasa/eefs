@@ -1,10 +1,10 @@
 /*
-**      Copyright (c) 2010-2014, United States government as represented by the 
-**      administrator of the National Aeronautics Space Administration.  
-**      All rights reserved. This software was created at NASAs Goddard 
+**      Copyright (c) 2010-2014, United States government as represented by the
+**      administrator of the National Aeronautics Space Administration.
+**      All rights reserved. This software was created at NASAs Goddard
 **      Space Flight Center pursuant to government contracts.
 **
-**      This is governed by the NASA Open Source Agreement and may be used, 
+**      This is governed by the NASA Open Source Agreement and may be used,
 **      distributed and modified only pursuant to the terms of that agreement.
 */
 
@@ -12,25 +12,25 @@
 ** File:
 **  $Id: eefstool_opts_bdm.c 1.2 2011/08/09 11:42:58GMT-05:00 acudmore Exp  $
 **
-** Purpose:  
+** Purpose:
 **
 ** $Date: 2011/08/09 11:42:58GMT-05:00 $
 ** $Revision: 1.2 $
 ** $Log: eefstool_opts_bdm.c  $
-** Revision 1.2 2011/08/09 11:42:58GMT-05:00 acudmore 
+** Revision 1.2 2011/08/09 11:42:58GMT-05:00 acudmore
 ** EEFS 2.0 changes for eefstool
-** Revision 1.2 2010/06/04 16:09:41EDT acudmore 
+** Revision 1.2 2010/06/04 16:09:41EDT acudmore
 ** Added --usage command
-** Revision 1.1 2010/05/06 15:09:06EDT acudmore 
+** Revision 1.1 2010/05/06 15:09:06EDT acudmore
 ** Initial revision
 ** Member added to project c:/MKSDATA/MKS-REPOSITORY/MMS-REPOSITORY/dev/eeprom-fsw/eefs/tools/eefstool/src/project.pj
-** Revision 1.1 2009/12/16 10:41:41EST acudmore 
+** Revision 1.1 2009/12/16 10:41:41EST acudmore
 ** Initial revision
 ** Member added to project c:/MKSDATA/MKS-REPOSITORY/MMS-REPOSITORY/dev/eeprom-fsw/eeprom-filesystem/tools/eefstool/src/project.pj
-** Revision 1.1 2009/12/10 14:37:53EST acudmore 
+** Revision 1.1 2009/12/10 14:37:53EST acudmore
 ** Initial revision
 ** Member added to project c:/MKSDATA/MKS-REPOSITORY/FSW-TOOLS-REPOSITORY/eeprom-filesystem/tools/eefstool/src/project.pj
-** 
+**
 */
 
 #include <stdio.h>
@@ -45,15 +45,15 @@
 #include "common_types.h"
 #include "eefstool_opts.h"
 
-/* 
-** This function initializes all command line options to their default values 
+/*
+** This function initializes all command line options to their default values
 */
 void SetCommandLineOptionsDefaults(CommandLineOptions_t *CommandLineOptions)
 {
 
     memset(&CommandLineOptions->Filename1, 0, FILENAME_SIZE);
     memset(&CommandLineOptions->Filename2, 0, FILENAME_SIZE);
-    
+
     memset(&CommandLineOptions->BdmDeviceName, 0, FILENAME_SIZE);
     CommandLineOptions->BdmDeviceEntered = FALSE;
 
@@ -61,7 +61,7 @@ void SetCommandLineOptionsDefaults(CommandLineOptions_t *CommandLineOptions)
     CommandLineOptions->EEFSMemoryAddressEntered = FALSE;
 
     CommandLineOptions->DirectoryListingCommand = FALSE;
-	CommandLineOptions->EepromUsageCommand = FALSE;
+    CommandLineOptions->EepromUsageCommand = FALSE;
     CommandLineOptions->CopyFromCommand = FALSE;
     CommandLineOptions->CopyToCommand = FALSE;
     CommandLineOptions->DeleteCommand = FALSE;
@@ -84,7 +84,7 @@ void ProcessCommandLineOptions(int argc, char *argv[], CommandLineOptions_t *Com
             { "bdm_device",       required_argument, NULL, 'b' },
             { "eefs_address",     required_argument, NULL, 'a' },
             { "dir",              no_argument,       NULL, 'l' },
-			{ "usage",            no_argument,       NULL, 'u' },
+            { "usage",            no_argument,       NULL, 'u' },
             { "copy_from",        no_argument,       NULL, 'f' },
             { "copy_to",          no_argument,       NULL, 't' },
             { "delete",           no_argument,       NULL, 'd' },
@@ -106,7 +106,7 @@ void ProcessCommandLineOptions(int argc, char *argv[], CommandLineOptions_t *Com
 
             case 'a':
                 CommandLineOptions->EEFSMemoryAddress = strtoul(optarg, &end, 0);
-                if (*end != 0 || errno != 0) 
+                if (*end != 0 || errno != 0)
                 {
                     printf("Error: Invalid EEPROM Size Parameter: %s", optarg);
                     DisplayUsage();
@@ -236,7 +236,7 @@ void ProcessCommandLineOptions(int argc, char *argv[], CommandLineOptions_t *Com
            strncpy(CommandLineOptions->Filename1, argv[0], FILENAME_SIZE);
            strncpy(CommandLineOptions->Filename2, argv[1], FILENAME_SIZE);
         }
- 
+
     }
     else
     {
@@ -248,7 +248,7 @@ void ProcessCommandLineOptions(int argc, char *argv[], CommandLineOptions_t *Com
 
 /* This function displays the usage information on the console and exits */
 void DisplayUsage(void)
-{    
+{
     printf("Usage: eefstool-bdm --bdm_device=<bdm-device-name> --eefs_address=<eefs-address> [OPTION]... [FILE1] [FILE2]\n");
     printf("  Options:\n");
     printf("  --dir                      : List the contents of the EEFS File System\n");

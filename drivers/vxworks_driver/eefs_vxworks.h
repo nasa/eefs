@@ -1,10 +1,10 @@
 /*
-**      Copyright (c) 2010-2014, United States government as represented by the 
-**      administrator of the National Aeronautics Space Administration.  
-**      All rights reserved. This software was created at NASAs Goddard 
+**      Copyright (c) 2010-2014, United States government as represented by the
+**      administrator of the National Aeronautics Space Administration.
+**      All rights reserved. This software was created at NASAs Goddard
 **      Space Flight Center pursuant to government contracts.
 **
-**      This is governed by the NASA Open Source Agreement and may be used, 
+**      This is governed by the NASA Open Source Agreement and may be used,
 **      distributed and modified only pursuant to the terms of that agreement.
 **
 */
@@ -20,7 +20,7 @@
 **    once during initialization.
 ** 2. Call EEFS_DevCreate() for each file system to add it to the vxWorks device list.  Separate device descriptos must
 **    be declared for each file system.
-** 
+**
 ** For Example:
 **
 ** EEFS_DeviceDescriptor_t EEFS_Bank1;
@@ -39,7 +39,7 @@
 */
 
 #ifndef _eefs_vxworks_
-#define	_eefs_vxworks_
+#define _eefs_vxworks_
 
 /*
  * Includes

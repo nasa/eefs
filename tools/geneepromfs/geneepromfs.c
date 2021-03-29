@@ -1,11 +1,11 @@
 
 /*
-**      Copyright (c) 2010-2014, United States government as represented by the 
-**      administrator of the National Aeronautics Space Administration.  
-**      All rights reserved. This software was created at NASAs Goddard 
+**      Copyright (c) 2010-2014, United States government as represented by the
+**      administrator of the National Aeronautics Space Administration.
+**      All rights reserved. This software was created at NASAs Goddard
 **      Space Flight Center pursuant to government contracts.
 **
-**      This is governed by the NASA Open Source Agreement and may be used, 
+**      This is governed by the NASA Open Source Agreement and may be used,
 **      distributed and modified only pursuant to the terms of that agreement.
 */
 
@@ -38,7 +38,7 @@
  * Macro Definitions
  */
 
-#define ROUND_UP(x, align)	(((int) (x) + (align - 1)) & ~(align - 1))
+#define ROUND_UP(x, align)  (((int) (x) + (align - 1)) & ~(align - 1))
 
 /*
  * Type Definitions
@@ -86,7 +86,7 @@ int main(int argc, char** argv) {
         memset(FileSystem.BaseAddress, 0, CommandLineOptions.EEPromSize);
 
         FileSystem.FileAllocationTable = FileSystem.BaseAddress;
-        
+
         FileSystem.FileAllocationTable->Header.Crc = 0; /* updated later */
         FileSystem.FileAllocationTable->Header.Magic = EEFS_FILESYS_MAGIC;
         FileSystem.FileAllocationTable->Header.Version = 1;
@@ -115,7 +115,7 @@ int main(int argc, char** argv) {
                 uint32      FreeMemorySize = FileSystem.FileAllocationTable->Header.FreeMemorySize;
                 uint32      FileSystemCrc = 0;
                 uint32      NumberOfFiles = FileSystem.FileAllocationTable->Header.NumberOfFiles;
-                
+
                 if (ThisMachineDataEncoding() != CommandLineOptions.Endian)
                     ByteSwapFileSystem(&FileSystem);
 
@@ -185,7 +185,7 @@ void AddFile(FileSystem_t *FileSystem, char *InputFilename, char *EEFSFilename, 
                     FileSystem->FileAllocationTable->File[FileSystem->FileAllocationTable->Header.NumberOfFiles].MaxFileSize = MaxFileSize;
 
                     FileHeader = FileSystem->BaseAddress + FileSystem->FileAllocationTable->File[FileSystem->FileAllocationTable->Header.NumberOfFiles].FileHeaderOffset;
-                    FileHeader->Crc = 0;       
+                    FileHeader->Crc = 0;
                     FileHeader->InUse = TRUE;
                     FileHeader->Attributes = Attributes;
                     FileHeader->FileSize = FileSize;
@@ -424,7 +424,7 @@ void UglyExit(char *Spec, ...)
     va_start(Args, Spec);
     vsprintf(Text, Spec, Args);
     va_end(Args);
-    
+
     printf("%s", Text);
     exit(1);
 }

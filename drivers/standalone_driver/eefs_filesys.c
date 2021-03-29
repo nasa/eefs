@@ -1,10 +1,10 @@
 /*
-**      Copyright (c) 2010-2014, United States government as represented by the 
-**      administrator of the National Aeronautics Space Administration.  
-**      All rights reserved. This software was created at NASAs Goddard 
+**      Copyright (c) 2010-2014, United States government as represented by the
+**      administrator of the National Aeronautics Space Administration.
+**      All rights reserved. This software was created at NASAs Goddard
 **      Space Flight Center pursuant to government contracts.
 **
-**      This is governed by the NASA Open Source Agreement and may be used, 
+**      This is governed by the NASA Open Source Agreement and may be used,
 **      distributed and modified only pursuant to the terms of that agreement.
 **
 */
@@ -12,14 +12,14 @@
 /*
 ** Filename: eefs_filesys.c
 **
-** Purpose: 
-**     This file contains the higher level api interface functions to the eefs_fileapi.c code. 
-**     This layer of the file system supports multiple devices and volumes where the 
+** Purpose:
+**     This file contains the higher level api interface functions to the eefs_fileapi.c code.
+**     This layer of the file system supports multiple devices and volumes where the
 **     eefs_fileapi.c layer only focuses on a single file system.
-**     Most of the functions in this file are essentually wrappers for the lower 
+**     Most of the functions in this file are essentually wrappers for the lower
 **     level function contained in eefs_fileapi.c.
 **     All api functions are designed to be as similar to a standard unix filesystem api as possible.
-**  
+**
 */
 
 /*
@@ -141,7 +141,7 @@ int32 EEFS_Mount(char *DeviceName, char *MountPoint)
     else { /* volume name is too long */
         ReturnCode = EEFS_ERROR;
     }
-    
+
     return(ReturnCode);
 }
 
@@ -200,11 +200,11 @@ int32 EEFS_Open(char *Path, uint32 Flags)
     if (EEFS_SplitPath(Path, &SplitPath) == 0) {
 
         if ((Volume = EEFS_FindVolume(SplitPath.MountPoint)) != NULL) {
-        
+
             if ((Device = EEFS_FindDevice(Volume->DeviceName)) != NULL) {
-            
+
                 if ((FileDescriptor = EEFS_LibOpen(&Device->InodeTable, SplitPath.Filename, Flags, 0)) >= 0) {
-                    
+
                     ReturnCode = FileDescriptor;
                 }
                 else { /* error opening file */
@@ -337,11 +337,11 @@ int32 EEFS_Remove(char *Path)
     int32                        ReturnCode;
 
     if (EEFS_SplitPath(Path, &SplitPath) == 0) {
-   
+
         if ((Volume = EEFS_FindVolume(SplitPath.MountPoint)) != NULL) {
 
             if ((Device = EEFS_FindDevice(Volume->DeviceName)) != NULL) {
-            
+
                 if (EEFS_LibRemove(&Device->InodeTable, SplitPath.Filename) == EEFS_SUCCESS) {
 
                     ReturnCode = EEFS_SUCCESS;
@@ -381,7 +381,7 @@ int32 EEFS_Rename(char *OldPath, char *NewPath)
         if (strcmp(OldSplitPath.MountPoint, NewSplitPath.MountPoint) == 0) {
 
             if ((Volume = EEFS_FindVolume(OldSplitPath.MountPoint)) != NULL) {
-                
+
                 if ((Device = EEFS_FindDevice(Volume->DeviceName)) != NULL) {
 
                     if (EEFS_LibRename(&Device->InodeTable, OldSplitPath.Filename, NewSplitPath.Filename) == EEFS_SUCCESS) {
@@ -579,7 +579,7 @@ int32 EEFS_SplitPath(char *InputPath, EEFS_SplitPath_t *SplitPath)
             else { /* missing first '/' */
                 ReturnCode = EEFS_ERROR;
             }
-        } 
+        }
         else { /* filename too long */
             ReturnCode = EEFS_ERROR;
         }

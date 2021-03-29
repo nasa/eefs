@@ -1,11 +1,11 @@
 /*
 **
-**      Copyright (c) 2010-2014, United States government as represented by the 
-**      administrator of the National Aeronautics Space Administration.  
-**      All rights reserved. This software was created at NASAs Goddard 
+**      Copyright (c) 2010-2014, United States government as represented by the
+**      administrator of the National Aeronautics Space Administration.
+**      All rights reserved. This software was created at NASAs Goddard
 **      Space Flight Center pursuant to government contracts.
 **
-**      This is governed by the NASA Open Source Agreement and may be used, 
+**      This is governed by the NASA Open Source Agreement and may be used,
 **      distributed and modified only pursuant to the terms of that agreement.
 */
 
@@ -79,7 +79,7 @@ extern uint32_t rtems_eefs_b_address;
 #define EEFS_PENDING_INODE 0xFFEE
 
 /*
-** Define for dev in stat struct 
+** Define for dev in stat struct
 */
 #define EEFS_DEVICE 0xEEF5
 
@@ -108,7 +108,7 @@ extern uint32_t rtems_eefs_b_address;
 /*
 ** EEFS File system info.
 */
-typedef struct eefs_info_s 
+typedef struct eefs_info_s
 {
     /*
     ** File system flags
@@ -121,14 +121,14 @@ typedef struct eefs_info_s
     rtems_id eefs_mutex;
 
     /*
-    ** Variable to coordinate a mknod/eval path call. 
-    ** Because of the way the EEFS works when creating a new file, we cannot 
-    ** actually create a new file when the "mknod" call is made. 
+    ** Variable to coordinate a mknod/eval path call.
+    ** Because of the way the EEFS works when creating a new file, we cannot
+    ** actually create a new file when the "mknod" call is made.
     ** This would be OK, but in the RTEMS "open" call, the "mknod" is called,
     ** followed by the "eval path" call, then the "open" call.
-    ** If we don't create the file in the EEFS in the "mknod" call, the 
-    ** "eval path" call will fail. 
-    ** The solution is to record the pending file create, then allow the 
+    ** If we don't create the file in the EEFS in the "mknod" call, the
+    ** "eval path" call will fail.
+    ** The solution is to record the pending file create, then allow the
     ** open to actually create it.
     */
     uint32_t mknod_pending;
@@ -143,7 +143,7 @@ typedef struct eefs_info_s
     */
     EEFS_InodeTable_t                 eefs_inode_table;
 
-	
+
 } eefs_info_t;
 
 /*
@@ -154,9 +154,9 @@ const rtems_filesystem_operations_table  rtems_eefs_ops;
 const rtems_filesystem_file_handlers_r   rtems_eefs_file_handlers;
 const rtems_filesystem_file_handlers_r   rtems_eefs_dir_handlers;
 
-/* 
-** rtems_eefs_initialize 
-**     This function handles the EEFS file system initialization when the 
+/*
+** rtems_eefs_initialize
+**     This function handles the EEFS file system initialization when the
 **     filesystem is mounted by RTEMS. It creates the filesystem specific
 **     data and populates the EEFS inode table.
 **
@@ -189,7 +189,7 @@ int rtems_eefs_initialize ( rtems_filesystem_mount_table_entry_t *mt_entry,
    mt_entry->fs_info                  = fs;
    mt_entry->mt_fs_root.node_access   = (void *)ROOT_INODE;
    mt_entry->mt_fs_root.node_access_2 = (void *)EEFS_FILE_NOT_FOUND;
-  
+
    /*
    ** Initalize the EEFS
    */
@@ -200,14 +200,14 @@ int rtems_eefs_initialize ( rtems_filesystem_mount_table_entry_t *mt_entry,
       #endif
       Status =  EEFS_LibInitFS( &(fs->eefs_inode_table),  (uint32)rtems_eefs_a_address );
    }
-   else 
+   else
    {
       #ifdef EEFS_DEBUG
          printf("Mounting EEFS Bank 2 at: 0x%08X\n", (unsigned int )rtems_eefs_a_address);
       #endif
       Status =  EEFS_LibInitFS( &(fs->eefs_inode_table), (uint32 )rtems_eefs_b_address);
    }
-    
+
    if (Status != EEFS_SUCCESS)
    {
       #ifdef EEFS_DEBUG
@@ -216,7 +216,7 @@ int rtems_eefs_initialize ( rtems_filesystem_mount_table_entry_t *mt_entry,
       free(fs);
       rtems_set_errno_and_return_minus_one (EIO);
    }
-	
+
    /*
    ** Create the semaphore for the internal data
    */
@@ -236,7 +236,7 @@ int rtems_eefs_initialize ( rtems_filesystem_mount_table_entry_t *mt_entry,
    return(RC_OK);
 }
 
-/* 
+/*
 ** rtems_eefs_shutdown
 **     Function to unmount/shutdown the instance of the EEFS file system.
 **
@@ -255,8 +255,8 @@ static int rtems_eefs_shutdown (rtems_filesystem_mount_table_entry_t* mt_entry)
    return(RC_OK);
 }
 
-/* 
-** rtems_eefs_evaluate_for_make 
+/*
+** rtems_eefs_evaluate_for_make
 **     The following routine evaluate path for a new node to be created.
 **     'pathloc' is returned with a pointer to the parent of the new node.
 **     'name' is returned with a pointer to the first character in the
@@ -287,7 +287,7 @@ static int rtems_eefs_evaluate_for_make(
 
    #ifdef EEFS_DEBUG
       printf("eefs_evaluate_for_make\n");
-   #endif 
+   #endif
 
    /*
    **  - Make sure the pathloc is the ROOT_INODE
@@ -302,7 +302,7 @@ static int rtems_eefs_evaluate_for_make(
 
        /*
        ** Check to see if the path has a ./ to strip from the front
-       */ 
+       */
        if ( path[0] == '.' && path[1] == '/' )
        {
           path = path + 2;
@@ -311,7 +311,7 @@ static int rtems_eefs_evaluate_for_make(
 
        /*
        ** Check to see if the path has any separators
-       **  it should not have any, since the EEFS does not 
+       **  it should not have any, since the EEFS does not
        **  support sub-directories.
        */
        slashFound = 0;
@@ -333,7 +333,7 @@ static int rtems_eefs_evaluate_for_make(
           }
 
           /*
-          ** Check to see if the file exists in the EEFS 
+          ** Check to see if the file exists in the EEFS
           */
           InodeIndex = EEFS_LibFindFile(&(fs->eefs_inode_table), (char *)path);
           if ( InodeIndex == EEFS_FILE_NOT_FOUND )
@@ -357,7 +357,7 @@ static int rtems_eefs_evaluate_for_make(
           ** Path contains the / character
           */
           rtems_set_errno_and_return_minus_one (ENOTSUP);
-       }    
+       }
    }
    else
    {
@@ -365,8 +365,8 @@ static int rtems_eefs_evaluate_for_make(
    }
    return(RC_OK);
 }
-/* 
-** rtems_eefs_eval_path 
+/*
+** rtems_eefs_eval_path
 **
 ** Evaluate the path to a node that wishes to be accessed. The pathloc is
 ** returned with the ino to the node to be accessed.
@@ -408,10 +408,10 @@ int rtems_eefs_eval_path (const char*                        path,
 
    #ifdef EEFS_DEBUG
       printf("eefs_eval_path: %s\n",path);
-   #endif 
+   #endif
 
    /*
-   ** get rid of a leading ( ./ ) 
+   ** get rid of a leading ( ./ )
    */
    if ( path[0] == '.' && path[1] == '/' )
    {
@@ -420,7 +420,7 @@ int rtems_eefs_eval_path (const char*                        path,
    }
 
    /*
-   ** Lock FS 
+   ** Lock FS
    */
    sc = rtems_semaphore_obtain(fs->eefs_mutex, RTEMS_WAIT,
                                 EEFS_VOLUME_SEMAPHORE_TIMEOUT);
@@ -428,7 +428,7 @@ int rtems_eefs_eval_path (const char*                        path,
    {
        rtems_set_errno_and_return_minus_one(EIO);
    }
-    
+
    if ((*path == '\0') || (pathlen == 0))
    {
        pathloc->node_access = (void *)ROOT_INODE;
@@ -440,13 +440,13 @@ int rtems_eefs_eval_path (const char*                        path,
        pathloc->node_access = (void *)ROOT_INODE;
        pathloc->node_access_2 = (void *)EEFS_FILE_NOT_FOUND;
        pathloc->handlers = &rtems_eefs_dir_handlers;
-   }     
+   }
    else if (rtems_eefs_parent_dir (path))
    {
        /*
        ** This case is for a path that is for the file system above
        ** ( for example: "../dev" )
-       ** The path must be evaluated by the parent file system 
+       ** The path must be evaluated by the parent file system
        */
        pathloc->node_access = (void *)ROOT_INODE;
        pathloc->node_access_2 = (void *)EEFS_FILE_NOT_FOUND;
@@ -459,7 +459,7 @@ int rtems_eefs_eval_path (const char*                        path,
        return (*pathloc->ops->evalpath_h)(path, pathlen,
                                           flags, pathloc);
     }
-    else 
+    else
     {
        /*
        ** Check to see if there is a mknod pending
@@ -484,7 +484,7 @@ int rtems_eefs_eval_path (const char*                        path,
        ** Find out if the file exists.
        ** It will be an inode number or EEFS_FILE_NOT_FOUND
        */
-       InodeIndex = EEFS_LibFindFile(&(fs->eefs_inode_table), (char *)path); 
+       InodeIndex = EEFS_LibFindFile(&(fs->eefs_inode_table), (char *)path);
        if ( InodeIndex == EEFS_FILE_NOT_FOUND )
        {
           rtems_semaphore_release(fs->eefs_mutex);
@@ -495,14 +495,14 @@ int rtems_eefs_eval_path (const char*                        path,
           returnCode = 0;
           pathloc->node_access_2 = (void *)InodeIndex;
           pathloc->handlers = &rtems_eefs_file_handlers;
-       }       
-    
+       }
+
    }
    rtems_semaphore_release(fs->eefs_mutex);
    return (returnCode);
 }
 
-/* 
+/*
 ** rtems_eefs_statvfs
 **     Return information about the mounted EEFS file system.
 **     used for determining available space.
@@ -530,7 +530,7 @@ int rtems_eefs_statvfs(
     #endif
 
     FreeBlocks = fs->eefs_inode_table.FreeMemorySize / 512;
-    TotalBlocks =  (2048 * 1024) / 512; 
+    TotalBlocks =  (2048 * 1024) / 512;
     FreeInodes =  EEFS_MAX_FILES - fs->eefs_inode_table.NumberOfFiles;
 
     /*
@@ -553,12 +553,12 @@ int rtems_eefs_statvfs(
 }
 
 /**************************************************************************/
-/*   
+/*
 **  File related functions
 */
 /**************************************************************************/
 
-/* 
+/*
 ** rtems_eefs_open
 **     Open an existing file. See mknod for creation of a new file.
 **
@@ -600,7 +600,7 @@ static int rtems_eefs_open(
    fs = eefs_info_iop (iop);
 
    /*
-   ** Extract file from the pathname 
+   ** Extract file from the pathname
    */
    cp1 = (char *)pathname;
    pathNameLen = strlen(pathname);
@@ -634,9 +634,9 @@ static int rtems_eefs_open(
    */
    if ((fs->mknod_pending == TRUE) && (strncmp(fs->mknod_pending_name, fileName, EEFS_MAX_FILENAME_SIZE) == 0))
    {
-      fs->mknod_pending = FALSE; 
+      fs->mknod_pending = FALSE;
       fs->mknod_pending_name[0] = 0;
-   
+
       /*
       ** Create a file in EEFS
       */
@@ -648,29 +648,29 @@ static int rtems_eefs_open(
          {
             rtems_set_errno_and_return_minus_one(ENOSPC);
          }
-         else   
+         else
          {
             rtems_set_errno_and_return_minus_one(EIO);
          }
       }
-	
+
       /*
       ** Store the file descriptor. This allows other calls to use the open file.
       */
       iop->file_info = (void *)eefs_fd;
-    
+
       /*
       ** Set up the correct size and offset
       */
       iop->offset = 0;
-      iop->size = 0; 
+      iop->size = 0;
       rtems_semaphore_release(fs->eefs_mutex);
    }
    else
    {
       /*
       ** Opening an existing file
-      */	
+      */
 
       /*
       ** Open file in EEFS
@@ -695,7 +695,7 @@ static int rtems_eefs_open(
       ** Store the file descriptor. This allows other calls to use the open file.
       */
       iop->file_info = (void *)eefs_fd;
-    
+
       /*
       ** Set up the correct size and offset
       */
@@ -703,18 +703,18 @@ static int rtems_eefs_open(
       {
          iop->offset = eefs_statbuffer.FileSize;
       }
-	
+
       /*
       ** Set the file size
-      */ 
-      iop->size = eefs_statbuffer.FileSize; 
+      */
+      iop->size = eefs_statbuffer.FileSize;
       rtems_semaphore_release(fs->eefs_mutex);
    }
 
-   return(RC_OK);    
+   return(RC_OK);
 }
 
-/* 
+/*
 ** rtems_eefs_close
 **     close an open EEFS file.
 **
@@ -741,14 +741,14 @@ static int rtems_eefs_close(
    ** Get the file system info.
    */
    fs = eefs_info_iop (iop);
-	
+
    sc = rtems_semaphore_obtain(fs->eefs_mutex, RTEMS_WAIT,
                                 EEFS_VOLUME_SEMAPHORE_TIMEOUT);
    if (sc != RTEMS_SUCCESSFUL)
    {
        rtems_set_errno_and_return_minus_one(EIO);
    }
-	
+
    /*
    ** Close the file in the EEFS
    */
@@ -758,13 +758,13 @@ static int rtems_eefs_close(
       rtems_semaphore_release(fs->eefs_mutex);
       rtems_set_errno_and_return_minus_one(EIO);
    }
-	
+
    rtems_semaphore_release(fs->eefs_mutex);
 
    return(RC_OK);
 }
 
-/* 
+/*
 ** rtems_eefs_read
 **     read data from an open EEFS file.
 **
@@ -780,8 +780,8 @@ static ssize_t rtems_eefs_read(
                                rtems_libio_t *iop,
                                void          *buffer,
                                size_t         count
-							   )
-{	
+                               )
+{
     ssize_t            ret = 0;
     rtems_status_code  sc = RTEMS_SUCCESSFUL;
     eefs_info_t       *fs = iop->pathinfo.mt_entry->fs_info;
@@ -799,16 +799,16 @@ static ssize_t rtems_eefs_read(
     {
         rtems_set_errno_and_return_minus_one(EIO);
     }
-	
+
     /*
     ** Read the file using the EEFS API
-    */ 
+    */
     eefs_status = EEFS_LibRead(eefs_fd, buffer, count);
     if ( eefs_status < 0 )
     {
        rtems_semaphore_release(fs->eefs_mutex);
        rtems_set_errno_and_return_minus_one(EIO);
-    }    
+    }
     else
     {
        /*
@@ -816,12 +816,12 @@ static ssize_t rtems_eefs_read(
        */
        ret = eefs_status;
     }
-    
+
     rtems_semaphore_release(fs->eefs_mutex);
     return (ret);
 }
 
-/* 
+/*
 ** rtems_eefs_write
 **     Write data to an open EEFS file.
 **
@@ -860,8 +860,8 @@ static ssize_t rtems_eefs_write(
        rtems_set_errno_and_return_minus_one(EIO);
    }
 
-   eefs_status = EEFS_LibWrite(eefs_fd, (void*)buffer, count); 
- 
+   eefs_status = EEFS_LibWrite(eefs_fd, (void*)buffer, count);
+
    if (eefs_status < 0)
    {
       rtems_semaphore_release(fs->eefs_mutex);
@@ -881,7 +881,7 @@ static ssize_t rtems_eefs_write(
    return (eefs_status);
 }
 
-/* 
+/*
 ** rtems_eefs_lseek
 **     Seek in an open file. The EEFS only supports SEEK_SET.
 **
@@ -935,9 +935,9 @@ rtems_off64_t rtems_eefs_lseek(
    return(RC_OK);
 }
 
-/* 
-** rtems_eefs_fstat 
-**     return information about a file in the EEFS 
+/*
+** rtems_eefs_fstat
+**     return information about a file in the EEFS
 **
 ** PARAMETERS:
 **     loc - node description
@@ -966,7 +966,7 @@ int rtems_eefs_fstat(rtems_filesystem_location_info_t *loc, struct stat  *buf)
 
     if ( (int)loc->node_access ==  ROOT_INODE )
     {
-       buf->st_dev = EEFS_DEVICE; 
+       buf->st_dev = EEFS_DEVICE;
        buf->st_ino = ROOT_INODE;
        buf->st_mode  = S_IFDIR | S_IRWXU | S_IRWXG | S_IRWXO;
        buf->st_rdev = 0;
@@ -979,15 +979,15 @@ int rtems_eefs_fstat(rtems_filesystem_location_info_t *loc, struct stat  *buf)
     else if ( (int)loc->node_access_2 != EEFS_FILE_NOT_FOUND )
     {
        eefsInode = (uint32)loc->node_access_2;
-       HeaderPtr =  (EEFS_FileHeader_t *)fs->eefs_inode_table.File[eefsInode].FileHeaderPointer; 	
+       HeaderPtr =  (EEFS_FileHeader_t *)fs->eefs_inode_table.File[eefsInode].FileHeaderPointer;
 
        /*
        ** Fill out the user's stat buffer
        ** Most of these things don't apply to the EEFS
        */
-       buf->st_dev = EEFS_DEVICE; 
+       buf->st_dev = EEFS_DEVICE;
        buf->st_ino = eefsInode + 1;
-       buf->st_rdev = 0; 
+       buf->st_rdev = 0;
        buf->st_mode  =  S_IFREG | S_IRUSR | S_IWUSR | S_IRGRP | S_IWGRP | S_IROTH | S_IWOTH;
        buf->st_size = HeaderPtr->FileSize;
        buf->st_blksize = 512;
@@ -1008,12 +1008,12 @@ int rtems_eefs_fstat(rtems_filesystem_location_info_t *loc, struct stat  *buf)
    return(RC_OK);
 }
 
-/* 
-** rtems_eefs_fopen 
-**     stub implementation to allow fopen to work properly 
+/*
+** rtems_eefs_fopen
+**     stub implementation to allow fopen to work properly
 **
 ** RETURNS:
-**     RC_OK 
+**     RC_OK
 */
 static int rtems_eefs_ftruncate(
     rtems_libio_t   *iop __attribute__((unused)),
@@ -1027,7 +1027,7 @@ static int rtems_eefs_ftruncate(
     return(RC_OK);
 }
 
-/* 
+/*
 ** rtems_eefs_node_type
 **     Returns the type of EEFS node. In the EEFS there are no
 **     sub-directories, so there is only one directory node ( the root ).
@@ -1054,7 +1054,7 @@ static rtems_filesystem_node_types_t rtems_eefs_node_type(
         #endif
         return RTEMS_FILESYSTEM_DIRECTORY;
     }
-    else 
+    else
     {
         #ifdef EEFS_DEBUG
            printf("File\n");
@@ -1063,22 +1063,22 @@ static rtems_filesystem_node_types_t rtems_eefs_node_type(
     }
 }
 
-/* 
+/*
 ** rtems_eefs_node_mknod
 **     Creates a new filesystem node. For the EEFS this is kind of a kludge because of the way
 **     the file size is determined for a new file. Normally a new node is created in a filesystem,
-**     then the file is opened for writing, rewound to the start, then written. The EEFS creates the 
-**     inode when a new file is opened for writing/create so this step is not really needed. In 
+**     then the file is opened for writing, rewound to the start, then written. The EEFS creates the
+**     inode when a new file is opened for writing/create so this step is not really needed. In
 **     addition to that, when you open a new file for writing in the EEFS, it just grabs space from
-**     the available free space until you close the file. The files in the EEFS are 
-**     usually pre-allocated, so this is the only way we can know how much space the file 
-**     will need. 
-**     When this function is called, it will just set up some variables that indicate that 
+**     the available free space until you close the file. The files in the EEFS are
+**     usually pre-allocated, so this is the only way we can know how much space the file
+**     will need.
+**     When this function is called, it will just set up some variables that indicate that
 **     a mknod is pending. When the eval_path is called after this by RTEMS, it will check to see
-**     if the file has been created, which will pass. Finally when the file is opened the 
+**     if the file has been created, which will pass. Finally when the file is opened the
 **     rtems_eefs_open function will see the "pending" status and complete the file creation/open
-**     step. 
-**     This would probably not be necessary if the 
+**     step.
+**     This would probably not be necessary if the
 **
 ** PARAMETERS:
 **     loc - node description structure
@@ -1131,7 +1131,7 @@ int rtems_eefs_mknod (const char                       *name,
     */
     fs->mknod_pending = TRUE;
 
-    /* 
+    /*
     ** Copy the name
     */
     strncpy (fs->mknod_pending_name, name, EEFS_MAX_FILENAME_SIZE);
@@ -1162,7 +1162,7 @@ static int rtems_eefs_free_node_info(
 }
 
 /*
-** rtems_eefs_rename - rename a file 
+** rtems_eefs_rename - rename a file
 */
 int rtems_eefs_rename(
  rtems_filesystem_location_info_t  *old_parent_loc,  /* IN */
@@ -1202,7 +1202,7 @@ int rtems_eefs_rename(
                 */
                 strncpy(FileHeader.Filename, name, EEFS_MAX_FILENAME_SIZE);
 
-                EEFS_LIB_EEPROM_WRITE(fs->eefs_inode_table.File[inode].FileHeaderPointer, 
+                EEFS_LIB_EEPROM_WRITE(fs->eefs_inode_table.File[inode].FileHeaderPointer,
                                    &FileHeader, sizeof(EEFS_FileHeader_t));
                 EEFS_LIB_EEPROM_FLUSH;
                 rtems_semaphore_release(fs->eefs_mutex);
@@ -1229,7 +1229,7 @@ int rtems_eefs_rename(
    }
    return(0);
 }
-  
+
 /*
 ** Unlink -- delete a file
 */
@@ -1269,7 +1269,7 @@ int rtems_eefs_unlink(
              if ( FileHeader.InUse == TRUE )
              {
                 FileHeader.InUse = FALSE;
-                EEFS_LIB_EEPROM_WRITE(fs->eefs_inode_table.File[inode].FileHeaderPointer, 
+                EEFS_LIB_EEPROM_WRITE(fs->eefs_inode_table.File[inode].FileHeaderPointer,
                                    &FileHeader, sizeof(EEFS_FileHeader_t));
                 EEFS_LIB_EEPROM_FLUSH;
                 rtems_semaphore_release(fs->eefs_mutex);
@@ -1298,7 +1298,7 @@ int rtems_eefs_unlink(
 }
 
 /**************************************************************************/
-/*  Directory related functions 
+/*  Directory related functions
 **
 */
 
@@ -1356,7 +1356,7 @@ int rtems_eefs_dir_open(rtems_libio_t *iop, const char *pathname, uint32_t flag,
     return(rc);
 }
 
-/* 
+/*
  * rtems_eefs_dir_close --
  *
  * PARAMETERS:
@@ -1433,15 +1433,15 @@ ssize_t rtems_eefs_dir_read(rtems_libio_t *iop, void *buffer, size_t count)
        if ( (iop->data0) >= fs->eefs_inode_table.NumberOfFiles )
        {
           rtems_semaphore_release(fs->eefs_mutex);
-          return(cmpltd); 
+          return(cmpltd);
        }
-    
+
        /*
        ** Read the file header from the EEFS
-       */  
+       */
        EEFS_LIB_EEPROM_READ(&FileHeader, fs->eefs_inode_table.File[iop->data0].FileHeaderPointer,
                           sizeof(EEFS_FileHeader_t));
-       if ( FileHeader.InUse == TRUE ) 
+       if ( FileHeader.InUse == TRUE )
        {
           tmp_dirent.d_ino = iop->data0 + 1;
           tmp_dirent.d_off = count; /* sizeof(struct dirent); */
@@ -1457,7 +1457,7 @@ ssize_t rtems_eefs_dir_read(rtems_libio_t *iop, void *buffer, size_t count)
           /*
           ** Update counters / offset
           */
-          (iop->offset) += (sizeof(struct dirent)); 
+          (iop->offset) += (sizeof(struct dirent));
           cmpltd += (sizeof(struct dirent));
           count -= (sizeof(struct dirent));
           (iop->data0 ) ++;
@@ -1551,60 +1551,60 @@ int rtems_eefs_dir_fchmod(rtems_filesystem_location_info_t *pathloc,
 /*
 ** The RTEMS OPS tables needed for the driver
 */
-const rtems_filesystem_operations_table  rtems_eefs_ops = 
+const rtems_filesystem_operations_table  rtems_eefs_ops =
 {
     .evalpath_h     = rtems_eefs_eval_path,
     .evalformake_h  = rtems_eefs_evaluate_for_make,
-    .link_h         = NULL, 
-    .unlink_h       = rtems_eefs_unlink, 
-    .node_type_h    = rtems_eefs_node_type, 
-    .mknod_h        = rtems_eefs_mknod, 
+    .link_h         = NULL,
+    .unlink_h       = rtems_eefs_unlink,
+    .node_type_h    = rtems_eefs_node_type,
+    .mknod_h        = rtems_eefs_mknod,
     .chown_h        = NULL,
     .freenod_h      = rtems_eefs_free_node_info,
-    .mount_h        = NULL, 
+    .mount_h        = NULL,
     .fsmount_me_h   = rtems_eefs_initialize,
-    .unmount_h      = NULL, 
+    .unmount_h      = NULL,
     .fsunmount_me_h = rtems_eefs_shutdown,
-    .utime_h        = NULL, 
+    .utime_h        = NULL,
     .eval_link_h    = NULL,
-    .symlink_h      = NULL, 
+    .symlink_h      = NULL,
     .readlink_h     = NULL,
     .rename_h       = rtems_eefs_rename,
-    .statvfs_h      = rtems_eefs_statvfs 
+    .statvfs_h      = rtems_eefs_statvfs
 };
 
-const rtems_filesystem_file_handlers_r rtems_eefs_file_handlers = 
+const rtems_filesystem_file_handlers_r rtems_eefs_file_handlers =
 {
    .open_h          = rtems_eefs_open,
    .close_h         = rtems_eefs_close,
    .read_h          = rtems_eefs_read,
    .write_h         = rtems_eefs_write,
-   .ioctl_h         = NULL, 
-   .lseek_h         = rtems_eefs_lseek, 
-   .fstat_h         = rtems_eefs_fstat, 
-   .fchmod_h        = NULL, 
+   .ioctl_h         = NULL,
+   .lseek_h         = rtems_eefs_lseek,
+   .fstat_h         = rtems_eefs_fstat,
+   .fchmod_h        = NULL,
    .ftruncate_h     = rtems_eefs_ftruncate,
-   .fpathconf_h     = NULL, 
-   .fsync_h         = NULL, 
-   .fdatasync_h     = NULL, 
-   .fcntl_h         = NULL, 
-   .rmnod_h         = NULL 
+   .fpathconf_h     = NULL,
+   .fsync_h         = NULL,
+   .fdatasync_h     = NULL,
+   .fcntl_h         = NULL,
+   .rmnod_h         = NULL
 };
 
-const rtems_filesystem_file_handlers_r rtems_eefs_dir_handlers = 
+const rtems_filesystem_file_handlers_r rtems_eefs_dir_handlers =
 {
    .open_h          = rtems_eefs_dir_open,
    .close_h         = rtems_eefs_dir_close,
    .read_h          = rtems_eefs_dir_read,
    .write_h         = NULL,
    .ioctl_h         = NULL,
-   .lseek_h         = rtems_eefs_dir_lseek, 
+   .lseek_h         = rtems_eefs_dir_lseek,
    .fstat_h         = rtems_eefs_fstat,   /* Use the same for files and directories */
    .fchmod_h        = rtems_eefs_dir_fchmod,
    .ftruncate_h     = NULL,
-   .fpathconf_h     = NULL, 
-   .fsync_h         = NULL, 
+   .fpathconf_h     = NULL,
+   .fsync_h         = NULL,
    .fdatasync_h     = NULL,
    .fcntl_h         = NULL,
-   .rmnod_h         = NULL 
+   .rmnod_h         = NULL
 };

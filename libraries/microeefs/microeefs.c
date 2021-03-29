@@ -1,10 +1,10 @@
 /*
-**      Copyright (c) 2010-2014, United States government as represented by the 
-**      administrator of the National Aeronautics Space Administration.  
-**      All rights reserved. This software was created at NASAs Goddard 
+**      Copyright (c) 2010-2014, United States government as represented by the
+**      administrator of the National Aeronautics Space Administration.
+**      All rights reserved. This software was created at NASAs Goddard
 **      Space Flight Center pursuant to government contracts.
 **
-**      This is governed by the NASA Open Source Agreement and may be used, 
+**      This is governed by the NASA Open Source Agreement and may be used,
 **      distributed and modified only pursuant to the terms of that agreement.
 */
 
@@ -46,7 +46,7 @@ void *MicroEEFS_FindFile(uint32 BaseAddress, char *Filename)
             (FileAllocationTableHeader.Version == 1)) {
 
             /* I use a pointer to search the FAT for the specified file.  This is done to minimize the amount of ram
-             * this code requires and to be independent of the EEFS_MAX_FILES parameter.  So if this code is used in the 
+             * this code requires and to be independent of the EEFS_MAX_FILES parameter.  So if this code is used in the
              * bootstrap then the EEFS_MAX_FILES can change without the need update the code and reburn the PROM. */
             FileAllocationTableEntry_ptr = (void *)(BaseAddress + sizeof(EEFS_FileAllocationTableHeader_t));
             for (i=0; i < FileAllocationTableHeader.NumberOfFiles; i++) {

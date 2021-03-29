@@ -1,11 +1,11 @@
 /*
 **
-**      Copyright (c) 2010-2014, United States government as represented by the 
-**      administrator of the National Aeronautics Space Administration.  
-**      All rights reserved. This software was created at NASAs Goddard 
+**      Copyright (c) 2010-2014, United States government as represented by the
+**      administrator of the National Aeronautics Space Administration.
+**      All rights reserved. This software was created at NASAs Goddard
 **      Space Flight Center pursuant to government contracts.
 **
-**      This is governed by the NASA Open Source Agreement and may be used, 
+**      This is governed by the NASA Open Source Agreement and may be used,
 **      distributed and modified only pursuant to the terms of that agreement.
 */
 
@@ -142,7 +142,7 @@
  *   EEPROM File System images are created using the geneepromfs tool.  This command line tool reads an input file that
  *   describes the files that will be included in the file system and outputs an EEPROM File System image ready to be
  *   burned into EEPROM.
- * 
+ *
  * References:
  *
  */
@@ -336,9 +336,9 @@ int32                           EEFS_LibRead(int32 FileDescriptor, void *Buffer,
  * on error. */
 int32                           EEFS_LibWrite(int32 FileDescriptor, void *Buffer, uint32 Length);
 
-/* Set the file pointer to a specific offset in the file.  This implementation does not support seeking beyond the end of a file.  
- * If a ByteOffset is specified that is beyond the end of the file then the file pointer is set to the end of the file.  If 
- * a ByteOffset is specified that is less than the start of the file then an error is returned.  Returns the current file pointer 
+/* Set the file pointer to a specific offset in the file.  This implementation does not support seeking beyond the end of a file.
+ * If a ByteOffset is specified that is beyond the end of the file then the file pointer is set to the end of the file.  If
+ * a ByteOffset is specified that is less than the start of the file then an error is returned.  Returns the current file pointer
  * on success, or EEFS_INVALID_ARGUMENT on error. */
 int32                           EEFS_LibLSeek(int32 FileDescriptor, int32 ByteOffset, uint16 Origin);
 
@@ -407,7 +407,7 @@ uint32                          EEFS_LibGetMaxOpenFiles(void);
 /* Prints the filenames of all open files for debugging */
 void                            EEFS_LibPrintOpenFiles(void);
 
-#endif 
+#endif
 
 /************************/
 /*  End of File Comment */
