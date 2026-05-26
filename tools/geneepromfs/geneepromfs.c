@@ -422,7 +422,11 @@ void UglyExit(char *Spec, ...)
     static char     Text[256];
 
     va_start(Args, Spec);
-    vsprintf(Text, Spec, Args);
+    /* CWE-787 fix: was vsprintf with no bound; the parser.c
+     * "Too Long" callers can push ~310 bytes of formatted output
+     * into this 256-byte BSS buffer and overflow neighboring globals.
+     * vsnprintf truncates safely; the message is informational anyway. */
+    vsnprintf(Text, sizeof(Text), Spec, Args);
     va_end(Args);
     
     printf("%s", Text);

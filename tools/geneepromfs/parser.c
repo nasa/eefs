@@ -118,6 +118,7 @@ uint32 GetToken(void)
                         }
                         if ((ch = fgetc(Parser.FilePointer)) == EOF) return(Parser.Token = END_OF_FILE);
                     }
+                    Parser.StringToken[STRING_TOKEN_SIZE - 1] = '\0';
                     UglyExit("File: %s Line: %lu: Error: String Token \'%s\' Too Long, Max Length: %lu\n", Parser.Filename, Parser.LineNumber, Parser.StringToken, STRING_TOKEN_SIZE);
 
                 } 
@@ -140,6 +141,7 @@ uint32 GetToken(void)
                         }
                         if ((ch = fgetc(Parser.FilePointer)) == EOF) return(Parser.Token = END_OF_FILE);
                     }
+                    Parser.StringToken[STRING_TOKEN_SIZE - 1] = '\0';
                     UglyExit("File: %s Line: %lu: Error: Number Token \'%s\' Too Long, Max Length: %lu\n", Parser.Filename, Parser.LineNumber, Parser.StringToken, STRING_TOKEN_SIZE);
                 }
                 else {
