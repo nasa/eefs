@@ -51,10 +51,22 @@ void *MicroEEFS_FindFile(uint32 BaseAddress, char *Filename)
             FileAllocationTableEntry_ptr = (void *)(BaseAddress + sizeof(EEFS_FileAllocationTableHeader_t));
             for (i=0; i < FileAllocationTableHeader.NumberOfFiles; i++) {
                 EEFS_LIB_EEPROM_READ(&FileAllocationTableEntry, FileAllocationTableEntry_ptr, sizeof(EEFS_FileAllocationTableEntry_t));
-                EEFS_LIB_EEPROM_READ(&FileHeader, (void *)(BaseAddress + FileAllocationTableEntry.FileHeaderOffset), sizeof(EEFS_FileHeader_t));
-                if ((FileHeader.InUse == TRUE) &&
-                    (strncmp(Filename, FileHeader.Filename, EEFS_MAX_FILENAME_SIZE) == 0)) {
-                    return((void *)(BaseAddress + FileAllocationTableEntry.FileHeaderOffset));
+                /* Wrap-check on each FileHeaderOffset — same shape as the fix
+                   in libraries/eepromfs/eefs_fileapi.c::EEFS_LibInitFS.  The
+                   offset comes from EEPROM (untrusted on a corrupted/SEU-flipped
+                   image); on a 32-bit flight CPU the sum can wrap to an
+                   arbitrary pointer that EEFS_LIB_EEPROM_READ then dereferences. */
+                {
+                    uintptr_t HdrAddr = (uintptr_t)BaseAddress
+                                      + (uintptr_t)FileAllocationTableEntry.FileHeaderOffset;
+                    if (HdrAddr < (uintptr_t)BaseAddress) {
+                        return(NULL);
+                    }
+                    EEFS_LIB_EEPROM_READ(&FileHeader, (void *)HdrAddr, sizeof(EEFS_FileHeader_t));
+                    if ((FileHeader.InUse == TRUE) &&
+                        (strncmp(Filename, FileHeader.Filename, EEFS_MAX_FILENAME_SIZE) == 0)) {
+                        return((void *)HdrAddr);
+                    }
                 }
                 FileAllocationTableEntry_ptr++;
             }

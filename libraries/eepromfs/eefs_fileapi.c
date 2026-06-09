@@ -99,12 +99,39 @@ int32 EEFS_LibInitFS(EEFS_InodeTable_t *InodeTable, uint32 BaseAddress)
             /* Initialize the Inode Table */
             memset(InodeTable, 0, sizeof(EEFS_InodeTable_t));
             InodeTable->BaseAddress = BaseAddress;
-            InodeTable->FreeMemoryPointer = (void *)(InodeTable->BaseAddress + FileAllocationTableHeader.FreeMemoryOffset);
+
+            /* Validate the FreeMemoryOffset before pointer arithmetic.  The
+               offset is loaded from EEPROM (untrusted on a corrupted /
+               tampered / SEU-flipped image).  On 32-bit flight CPUs the
+               addition (BaseAddress + offset) can wrap around 2^32 and
+               yield an arbitrary pointer that subsequent writes scribble
+               on.  Detect the wrap by checking the sum against the base. */
+            {
+                uintptr_t FreeAddr = (uintptr_t)InodeTable->BaseAddress
+                                   + (uintptr_t)FileAllocationTableHeader.FreeMemoryOffset;
+                if (FreeAddr < (uintptr_t)InodeTable->BaseAddress) {
+                    ReturnCode = EEFS_NO_SUCH_DEVICE;
+                    EEFS_LIB_UNLOCK;
+                    return(ReturnCode);
+                }
+                InodeTable->FreeMemoryPointer = (void *)FreeAddr;
+            }
             InodeTable->FreeMemorySize = FileAllocationTableHeader.FreeMemorySize;
             InodeTable->NumberOfFiles = FileAllocationTableHeader.NumberOfFiles;
             for (i=0; i < InodeTable->NumberOfFiles; i++) {
                 EEFS_LIB_EEPROM_READ(&FileAllocationTableEntry, &FileAllocationTable->File[i], sizeof(EEFS_FileAllocationTableEntry_t));
-                InodeTable->File[i].FileHeaderPointer = (void *)(BaseAddress + FileAllocationTableEntry.FileHeaderOffset);
+                /* Same wrap-check on each FileHeaderOffset.  Each entry is
+                   independent, so each can carry a malformed offset. */
+                {
+                    uintptr_t HdrAddr = (uintptr_t)BaseAddress
+                                      + (uintptr_t)FileAllocationTableEntry.FileHeaderOffset;
+                    if (HdrAddr < (uintptr_t)BaseAddress) {
+                        ReturnCode = EEFS_NO_SUCH_DEVICE;
+                        EEFS_LIB_UNLOCK;
+                        return(ReturnCode);
+                    }
+                    InodeTable->File[i].FileHeaderPointer = (void *)HdrAddr;
+                }
                 InodeTable->File[i].MaxFileSize = FileAllocationTableEntry.MaxFileSize;
             }
             ReturnCode = EEFS_SUCCESS;
